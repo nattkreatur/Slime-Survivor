@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 public float speed = 5f;
+private Enemy nearbyEnemy;
 
     void Update()
     {
@@ -29,11 +30,29 @@ public float speed = 5f;
         direction = direction.normalized;
         //Detta ger rörelse
         transform.position += direction * speed * Time.deltaTime;
+
+        //Egenskaper för attack
+        ///////////////////////
+        if(Input.GetKeyDown(KeyCode.Space) && nearbyEnemy != null)
+        {
+            nearbyEnemy.TakeDamage(10);
+        }
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Jag träffade " + other.gameObject.name);
-        Enemy enemy = other.GetComponent<Enemy>();
-        enemy.TakeDamage(10);
+        if (other.CompareTag("Enemy")){
+            nearbyEnemy = other.GetComponent<Enemy>();
+        }
+        
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            nearbyEnemy = null; 
+        }
+        
     }
 }

@@ -20,5 +20,10 @@ public class Enemy : MonoBehaviour
     {
         health -= damage;
         Debug.Log("Slime HP: " + health);
+
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

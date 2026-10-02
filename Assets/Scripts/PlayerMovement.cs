@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+public float health = 100f;
 public float speed = 5f;
 private Enemy nearbyEnemy;
 
@@ -55,4 +56,17 @@ private Enemy nearbyEnemy;
         }
         
     }
+
+        public void TakeDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log("Player HP: " + health);
+
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+            Debug.Log("Game over");
+        }
+    }
+
 }

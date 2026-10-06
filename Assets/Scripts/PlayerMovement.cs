@@ -1,11 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-public float health = 100f;
-public float speed = 5f;
-private Enemy nearbyEnemy;
+    public float health = 100f;
+    public float speed = 5f;
+    private Enemy nearbyEnemy;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
+    void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
+    }
     void Update()
     {
         //Variabeln direction utgår från 0 men tar input från ifsatsen
@@ -60,6 +68,7 @@ private Enemy nearbyEnemy;
         public void TakeDamage(int damage)
     {
         health -= damage;
+        StartCoroutine(DamageFlash());
         Debug.Log("Player HP: " + health);
 
         if(health <= 0)
@@ -67,6 +76,14 @@ private Enemy nearbyEnemy;
             Destroy(gameObject);
             Debug.Log("Game over");
         }
+    }
+
+    private IEnumerator DamageFlash()
+    {
+        spriteRenderer.color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = originalColor;
+        
     }
 
 }

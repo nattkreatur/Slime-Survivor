@@ -1,5 +1,6 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        
     }
     // Update is called once per frame
     void Update()
@@ -42,12 +44,18 @@ public class Enemy : MonoBehaviour
         Debug.Log("Spelar tar DMG " + other.gameObject.name);
         if (other.CompareTag("Player")){
             player.TakeDamage(10);
-            Vector3 knockbackDirection = transform.position - player.transform.position;
+            Vector2 knockbackDirection = transform.position - player.transform.position;
             knockbackDirection = knockbackDirection.normalized;
             isKnockedBack = true;
             rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-        }
-        
+            StartCoroutine(KnockBackCooldown());
+        } 
+    }
+
+    private IEnumerator KnockBackCooldown()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isKnockedBack = false;
     }
 
 }
